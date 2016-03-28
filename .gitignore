@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+
+.idea
+build
+.classpath
+.project
+library/bin
+library/gen
+project.properties
