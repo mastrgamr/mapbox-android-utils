@@ -18,12 +18,15 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
-import net.mastrgamr.mbmapboxutils.geojson.GeoJsonLayer;
+import net.mastrgamr.mbmapboxutils.clustering.ClusterManager;
 import net.mastrgamr.mbmaputils.R;
+import net.mastrgamr.mbmaputils.demo.MapboxDevPreview.MyItem;
+import net.mastrgamr.mbmaputils.demo.MapboxDevPreview.MyItemReader;
 
 import org.json.JSONException;
 
-import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
@@ -103,12 +106,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        map.onStart();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         map.onResume();
@@ -118,12 +115,6 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         map.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        map.onStop();
     }
 
     @Override
@@ -137,21 +128,38 @@ public class MainActivity extends AppCompatActivity
         super.onLowMemory();
         map.onLowMemory();
     }
-
+    private ClusterManager<MyItem> mClusterManager;
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
         Log.d(TAG, "onMapReady: READY!");
         this.mbMap = mapboxMap;
-        this.mbMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.501008, -122.672824), 12f));
+//        this.mbMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.501008, -122.672824), 12f));
+//
+//        GeoJsonLayer layer = null;
+//        try {
+//            layer = new GeoJsonLayer(mbMap, R.raw.portland_line, this);
+//            layer.addLayerToMap();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-        GeoJsonLayer layer = null;
+        mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+
+        mClusterManager = new ClusterManager<MyItem>(this, mapboxMap);
+        mapboxMap.setOnCameraChangeListener(mClusterManager);
+
         try {
-            layer = new GeoJsonLayer(mbMap, R.raw.portland_line, this);
-            layer.addLayerToMap();
-        } catch (IOException e) {
-            e.printStackTrace();
+            readItems();
         } catch (JSONException e) {
-            e.printStackTrace();
+            Toast.makeText(this, "Problem reading list of markers.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void readItems() throws JSONException {
+        InputStream inputStream = getResources().openRawResource(R.raw.radar_search);
+        List<MyItem> items = new MyItemReader().read(inputStream);
+        mClusterManager.addItems(items);
     }
 }
