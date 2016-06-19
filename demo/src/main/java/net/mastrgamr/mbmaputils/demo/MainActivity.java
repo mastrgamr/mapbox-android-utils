@@ -1,5 +1,6 @@
 package net.mastrgamr.mbmaputils.demo;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,9 +12,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationListener;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -29,11 +33,13 @@ import java.io.InputStream;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, LocationListener {
 
     private final String TAG = getClass().getSimpleName();
     private MapView map;
     private MapboxMap mbMap;
+    Marker marker;
+    MarkerOptions markOpt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +53,16 @@ public class MainActivity extends AppCompatActivity
         map.getMapAsync(this);
         map.setStyleUrl(Style.MAPBOX_STREETS);
 
+        markOpt = new MarkerOptions().position(new LatLng(40.755963, -73.985585)).title("Eh");
+        marker = new Marker(markOpt);
+
 //Disable for now | TODO: Change locations/geogson/etc something else
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+//                System.out.println("REMOVING");
+//                mbMap.removeMarker(markOpt.getMarker());
 //            }
 //        });
 
@@ -133,6 +142,7 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(MapboxMap mapboxMap) {
         Log.d(TAG, "onMapReady: READY!");
         this.mbMap = mapboxMap;
+        mapboxMap.setMyLocationEnabled(true);
 //        this.mbMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.501008, -122.672824), 12f));
 //
 //        GeoJsonLayer layer = null;
@@ -155,11 +165,19 @@ public class MainActivity extends AppCompatActivity
         } catch (JSONException e) {
             Toast.makeText(this, "Problem reading list of markers.", Toast.LENGTH_LONG).show();
         }
+
+//        mbMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.755963, -73.985585), 9));
+//        mbMap.addMarker(markOpt);
     }
 
     private void readItems() throws JSONException {
         InputStream inputStream = getResources().openRawResource(R.raw.radar_search);
         List<MyItem> items = new MyItemReader().read(inputStream);
         mClusterManager.addItems(items);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 }
