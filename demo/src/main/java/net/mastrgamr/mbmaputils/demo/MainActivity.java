@@ -32,7 +32,7 @@ import org.json.JSONException;
 import java.io.InputStream;
 import java.util.List;
 
-public class ClusteringActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, LocationListener {
 
     private final String TAG = getClass().getSimpleName();
