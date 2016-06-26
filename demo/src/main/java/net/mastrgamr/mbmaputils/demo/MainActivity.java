@@ -36,10 +36,13 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, LocationListener {
 
     private final String TAG = getClass().getSimpleName();
+
     private MapView map;
     private MapboxMap mbMap;
-    Marker marker;
-    MarkerOptions markOpt;
+    private Marker marker;
+    private MarkerOptions markOpt;
+
+    private ClusterManager<MyItem> mClusterManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         super.onLowMemory();
         map.onLowMemory();
     }
-    private ClusterManager<MyItem> mClusterManager;
+
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
         Log.d(TAG, "onMapReady: READY!");
