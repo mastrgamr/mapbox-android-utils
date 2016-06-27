@@ -3,22 +3,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_geojson"
-            android:title="GeoJson Demo"
-            android:checked="true"/>
-        <!--android:icon="@drawable/ic_menu_camera" Icons later-->
+            android:id="@+id/nav_clustering"
+            android:title="Clustering Demo"
+            android:checked="true" />
         <item
             android:id="@+id/nav_distance"
             android:title="Distance Demo" />
+        <item
+            android:id="@+id/nav_geojson"
+            android:title="GeoJson Demo"/>
         <item
             android:id="@+id/nav_heatmaps"
             android:title="Heatmaps Demo" />
         <item
             android:id="@+id/nav_polydecode"
             android:title="Polydecode Demo" />
-        <item
-            android:id="@+id/nav_clustering"
-            android:title="Clustering Demo" />
+        <!--android:icon="@drawable/ic_menu_camera" Icons later-->
     </group>
 
     <item android:title="Information">
