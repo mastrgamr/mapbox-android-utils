@@ -65,7 +65,7 @@ public class GeoJsonFragment extends Fragment implements
         map.onCreate(savedInstanceState);
         map.getMapAsync(this);
         map.setStyleUrl(Style.MAPBOX_STREETS);
-        
+
         return v;
     }
 
