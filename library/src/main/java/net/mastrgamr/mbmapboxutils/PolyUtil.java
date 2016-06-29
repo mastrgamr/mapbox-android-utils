@@ -16,6 +16,8 @@
 
 package net.mastrgamr.mbmapboxutils;
 
+import android.location.Location;
+
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
@@ -517,5 +519,20 @@ public class PolyUtil {
             v >>= 5;
         }
         result.append(Character.toChars((int) (v + 63)));
+    }
+
+    public static boolean isPolyLineClicked(List<LatLng> path, LatLng tapPoint){
+        for (LatLng polyCoords : path) {
+            float[] results = new float[1];
+            Location.distanceBetween(tapPoint.getLatitude(), tapPoint.getLongitude(),
+                    polyCoords.getLatitude(), polyCoords.getLongitude(), results);
+
+            if (results[0] < 100) {
+                // If distance is less than 100 meters, this is your polyline
+                //Log.e(TAG, "Found @ "+point.getLatitude()+" "+point.getLongitude());
+                return true;
+            }
+        }
+        return false;
     }
 }

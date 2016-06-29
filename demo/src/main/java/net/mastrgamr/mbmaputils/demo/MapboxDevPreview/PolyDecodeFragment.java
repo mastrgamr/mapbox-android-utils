@@ -38,7 +38,6 @@ public class PolyDecodeFragment extends Fragment implements
     private MapView map;
     private MapboxMap mbMap;
 
-
     public PolyDecodeFragment() { }
 
     /**
@@ -79,7 +78,6 @@ public class PolyDecodeFragment extends Fragment implements
 
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
-
         List<LatLng> decodedPath = PolyUtil.decode(LINE);
 
         mapboxMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(2.5f));
